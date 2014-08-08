@@ -1,0 +1,33 @@
+#!/bin/sh
+
+# g as git grep
+#
+function g()
+{
+  if [ $# -ge 1 ]; then
+    git grep $@
+  else
+    printf "No arguments supplied\nUse \`git grep --help\` for help\n"
+  fi
+}
+
+# ccc connect to a network by passing the
+# connection id
+#
+function ccc() {
+  if [ "$#" -eq 1 ]; then
+    CONNECTED_DEVICE=`nmcli d | grep '\bconnected\b' | awk '{ print $1; }'`
+    if ! [ -z "$CONNECTED_DEVICE" ]; then
+      nmcli dev disconnect iface $CONNECTED_DEVICE
+    fi
+
+    nmcli con up id $1
+    CONNECTED_DEVICE=`nmcli d | grep '\bconnected\b' | awk '{ print $1; }'`
+    printf "Connected to $CONNECTED_DEVICE\n"
+  else
+    printf "Wrong number of arguments.\n\n"
+    printf "ccc Usage:\n"
+    printf "ccc accepts one argument:\n"
+    printf "The id of the connection you want to connect to ie. Wired\\ Connection\\ 1.\n"
+  fi
+}

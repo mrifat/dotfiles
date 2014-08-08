@@ -1,0 +1,12 @@
+#!/bin/bash
+
+WINDOW_X_LOCATION=`xwininfo -id $(xdpyinfo | grep focus | grep -E -o 0x[0-9a-f]+) | grep '\bAbsolute\ upper-left\ X\b' | awk '{ print $4; }'`
+
+if [ "$WINDOW_X_LOCATION" -le 3358 ]; then
+  POS="0 0"
+else
+  POS="1680 0"
+fi
+
+/usr/bin/xdotool windowmove `/usr/bin/xdotool getwindowfocus` $POS
+exit 0
