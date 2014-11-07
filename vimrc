@@ -22,35 +22,35 @@ filetype off
 set rtp+=~/.vim/bundle/vundle/
 call vundle#rc()
 
-Bundle 'gmarik/vundle'
-Bundle 'tpope/vim-fugitive'
+Plugin 'gmarik/vundle'
+Plugin 'tpope/vim-fugitive'
 
 " Utility
-Bundle "repeat.vim"
-Bundle "surround.vim"
-Bundle "SuperTab"
-Bundle "file-line"
-Bundle "grep.vim"
-Bundle "Tabular"
-Bundle 'Lokaltog/vim-powerline'
-Bundle 'Syntastic'
-Bundle 'The-NERD-tree'
-Bundle 'FindInNERDTree'
-Bundle 'textobj-user'
-Bundle 'textobj-rubyblock'
-" Bundle 'delimitMate.vim'
-Bundle 'Puppet-Syntax-Highlighting'
-Bundle 'EasyMotion'
-Bundle 'airblade/vim-gitgutter'
-Bundle 'kien/ctrlp.vim'
-Bundle 'guns/vim-clojure-static'
-Bundle 'rainbow_parentheses.vim'
-Bundle 'tpope/vim-fireplace'
-Bundle 'vim-coffee-script'
+Plugin "repeat.vim"
+Plugin "surround.vim"
+Plugin "SuperTab"
+Plugin "file-line"
+Plugin "grep.vim"
+Plugin "Tabular"
+Plugin 'Lokaltog/vim-powerline'
+Plugin 'Syntastic'
+Plugin 'The-NERD-tree'
+Plugin 'FindInNERDTree'
+Plugin 'textobj-user'
+Plugin 'textobj-rubyblock'
+" Plugin 'delimitMate.vim'
+Plugin 'Puppet-Syntax-Highlighting'
+Plugin 'EasyMotion'
+Plugin 'airblade/vim-gitgutter'
+Plugin 'kien/ctrlp.vim'
+Plugin 'guns/vim-clojure-static'
+Plugin 'rainbow_parentheses.vim'
+Plugin 'tpope/vim-fireplace'
+Plugin 'vim-coffee-script'
 
 " FuzzyFinder
-Bundle "L9"
-Bundle "FuzzyFinder"
+Plugin "L9"
+Plugin "FuzzyFinder"
 let mapleader=','
 let g:fuf_modesDisable = [] " {{{
 nnoremap <silent> <Leader>h :FufHelp<CR>
@@ -68,12 +68,12 @@ nnoremap <silent> <Leader>9  :FufTaggedFile<CR>
 " " }}}
 
 " tComment
-Bundle "tComment"
+Plugin "tComment"
 nnoremap // :TComment<CR>
 vnoremap // :TComment<CR>
 
 " Command-T
-Bundle "git://git.wincent.com/command-t.git"
+Plugin "git://git.wincent.com/command-t.git"
 let g:CommandTMatchWindowAtTop=1 " show window at top
 nnoremap <silent> <Leader>t :CommandT<CR>
 
