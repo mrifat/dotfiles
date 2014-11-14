@@ -1,0 +1,22 @@
+###########################
+# xbindkeys configuration #
+###########################
+#
+# Version: 0.1.3
+
+#keystate_numlock = enable
+#keystate_scrolllock = enable
+#keystate_capslock = enable
+
+#Test
+"xmacroplay ${DISPLAY} < find_and_replace.txt"
+    m:0x0 + c:191
+    XF86Tools
+
+# Tmux
+"xmacroplay ${DISPLAY} < tmux.txt"
+  m:0x0 + c:192
+  XF86Launch5
+
+#
+# End of xbindkeys configuration
