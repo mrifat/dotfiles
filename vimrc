@@ -19,7 +19,7 @@ endif
 set nocompatible
 filetype off
 
-set rtp+=~/.vim/bundle/vundle/
+set rtp+=~/.vim/bundle/Vundle.vim
 call vundle#begin()
 
 Plugin 'gmarik/vundle'
@@ -51,7 +51,7 @@ Plugin "FuzzyFinder"
 Plugin "tComment"
 Plugin "git://git.wincent.com/command-t.git"
 
-call vundle#end
+call vundle#end()
 
 let mapleader=','
 let g:fuf_modesDisable = [] " {{{
