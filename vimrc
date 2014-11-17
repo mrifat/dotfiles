@@ -20,7 +20,7 @@ set nocompatible
 filetype off
 
 set rtp+=~/.vim/bundle/vundle/
-call vundle#rc()
+call vundle#begin()
 
 Plugin 'gmarik/vundle'
 Plugin 'tpope/vim-fugitive'
@@ -38,7 +38,6 @@ Plugin 'The-NERD-tree'
 Plugin 'FindInNERDTree'
 Plugin 'textobj-user'
 Plugin 'textobj-rubyblock'
-" Plugin 'delimitMate.vim'
 Plugin 'Puppet-Syntax-Highlighting'
 Plugin 'EasyMotion'
 Plugin 'airblade/vim-gitgutter'
@@ -47,10 +46,13 @@ Plugin 'guns/vim-clojure-static'
 Plugin 'rainbow_parentheses.vim'
 Plugin 'tpope/vim-fireplace'
 Plugin 'vim-coffee-script'
-
-" FuzzyFinder
 Plugin "L9"
 Plugin "FuzzyFinder"
+Plugin "tComment"
+Plugin "git://git.wincent.com/command-t.git"
+
+call vundle#end
+
 let mapleader=','
 let g:fuf_modesDisable = [] " {{{
 nnoremap <silent> <Leader>h :FufHelp<CR>
@@ -68,12 +70,10 @@ nnoremap <silent> <Leader>9  :FufTaggedFile<CR>
 " " }}}
 
 " tComment
-Plugin "tComment"
 nnoremap // :TComment<CR>
 vnoremap // :TComment<CR>
 
 " Command-T
-Plugin "git://git.wincent.com/command-t.git"
 let g:CommandTMatchWindowAtTop=1 " show window at top
 nnoremap <silent> <Leader>t :CommandT<CR>
 
