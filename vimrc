@@ -51,6 +51,7 @@ Plugin 'FuzzyFinder'
 Plugin 'tComment'
 Plugin 'git://git.wincent.com/command-t.git'
 Plugin 'mxw/vim-jsx'
+Plugin 'https://github.com/dag/vim2hs.git'
 
 call vundle#end()
 
