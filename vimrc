@@ -26,12 +26,12 @@ Plugin 'gmarik/vundle'
 Plugin 'tpope/vim-fugitive'
 
 " Utility
-Plugin "repeat.vim"
-Plugin "surround.vim"
-Plugin "SuperTab"
-Plugin "file-line"
-Plugin "grep.vim"
-Plugin "Tabular"
+Plugin 'repeat.vim'
+Plugin 'surround.vim'
+Plugin 'SuperTab'
+Plugin 'file-line'
+Plugin 'grep.vim'
+Plugin 'Tabular'
 Plugin 'Lokaltog/vim-powerline'
 Plugin 'Syntastic'
 Plugin 'The-NERD-tree'
@@ -46,10 +46,11 @@ Plugin 'guns/vim-clojure-static'
 Plugin 'rainbow_parentheses.vim'
 Plugin 'tpope/vim-fireplace'
 Plugin 'vim-coffee-script'
-Plugin "L9"
-Plugin "FuzzyFinder"
-Plugin "tComment"
-Plugin "git://git.wincent.com/command-t.git"
+Plugin 'L9'
+Plugin 'FuzzyFinder'
+Plugin 'tComment'
+Plugin 'git://git.wincent.com/command-t.git'
+Plugin 'mxw/vim-jsx'
 
 call vundle#end()
 
@@ -277,6 +278,10 @@ au VimEnter * RainbowParenthesesToggle
 au Syntax * RainbowParenthesesLoadRound
 au Syntax * RainbowParenthesesLoadSquare
 au Syntax * RainbowParenthesesLoadBraces
+
+let g:jsx_ext_required = 0 " Allow JSX in normal JS files
+
+let g:syntastic_javascript_checkers = ['eslint']
 
 let g:rbpt_colorpairs = [
     \ ['brown',       'RoyalBlue3'],
