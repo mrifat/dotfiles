@@ -1,31 +1,13 @@
-" An example for a vimrc file.
-"
-" Maintainer: Bram Moolenaar <Bram@vim.org>
-" Last change:  2008 Dec 17
-"
-" To use it, copy it to
-"     for Unix and OS/2:  ~/.vimrc
-"       for Amiga:  s:.vimrc
-"  for MS-DOS and Win32:  $VIM\_vimrc
-"     for OpenVMS:  sys$login:.vimrc
-
-" When started as "evim", evim.vim will already have done these settings.
-if v:progname =~? "evim"
-  finish
-endif
-
-" Use Vim settings, rather than Vi settings (much better!).
-" This must be first, because it changes other options as a side effect.
 set nocompatible
 filetype off
 
 set rtp+=~/.vim/bundle/Vundle.vim
 call vundle#begin()
 
-Plugin 'gmarik/vundle'
+Plugin 'gmarik/Vundle.vim'
+Plugin 'tpope/vim-bundler'
 Plugin 'tpope/vim-fugitive'
 
-" Utility
 Plugin 'repeat.vim'
 Plugin 'surround.vim'
 Plugin 'SuperTab'
@@ -35,7 +17,6 @@ Plugin 'Tabular'
 Plugin 'Lokaltog/vim-powerline'
 Plugin 'Syntastic'
 Plugin 'The-NERD-tree'
-Plugin 'FindInNERDTree'
 Plugin 'textobj-user'
 Plugin 'textobj-rubyblock'
 Plugin 'Puppet-Syntax-Highlighting'
@@ -45,39 +26,28 @@ Plugin 'kien/ctrlp.vim'
 Plugin 'guns/vim-clojure-static'
 Plugin 'rainbow_parentheses.vim'
 Plugin 'tpope/vim-fireplace'
-Plugin 'vim-coffee-script'
-Plugin 'L9'
-Plugin 'FuzzyFinder'
-Plugin 'tComment'
-Plugin 'git://git.wincent.com/command-t.git'
-Plugin 'mxw/vim-jsx'
-Plugin 'https://github.com/dag/vim2hs.git'
-
-call vundle#end()
-
-let mapleader=','
-let g:fuf_modesDisable = [] " {{{
-nnoremap <silent> <Leader>h :FufHelp<CR>
-nnoremap <silent> <Leader>2  :FufFileWithCurrentBufferDir<CR>
-nnoremap <silent> <Leader>f  :FufFile<CR>
-nnoremap <silent> <Leader>b  :FufBuffer<CR>
-nnoremap <silent> <Leader>4  :FufDirWithCurrentBufferDir<CR>
-nnoremap <silent> <Leader>$  :FufDir<CR>
-nnoremap <silent> <Leader>5  :FufChangeList<CR>
-nnoremap <silent> <Leader>6  :FufMruFile<CR>
-nnoremap <silent> <Leader>l  :FufLine<CR>
-nnoremap <silent> <LocalLeader>8  :FufBookmark<CR>
-nnoremap <silent> <Leader>*  :FuzzyFinderAddBookmark<CR><CR>
-nnoremap <silent> <Leader>9  :FufTaggedFile<CR>
-" " }}}
+Plugin 'tpope/vim-rake'
+Plugin 'tpope/vim-rails'
+Plugin 'tpope/vim-dispatch'
+Plugin 'ntpeters/vim-better-whitespace'
+Plugin 'LaTeX-Suite-aka-Vim-LaTeX'
+Plugin 'sheerun/vim-polyglot'
+Plugin 'ludovicchabant/vim-gutentags'
+Plugin 'neomake/neomake'
+Plugin 'c-brenn/phoenix.vim'
+Plugin 'tpope/vim-projectionist'
+Plugin 'slashmili/alchemist.vim'
 
 " tComment
+Plugin 'tComment'
+
+" All of your Plugins must be added before the following line
+call vundle#end()            " required
+filetype plugin indent on    " required
+
+let mapleader=','
 nnoremap // :TComment<CR>
 vnoremap // :TComment<CR>
-
-" Command-T
-let g:CommandTMatchWindowAtTop=1 " show window at top
-nnoremap <silent> <Leader>t :CommandT<CR>
 
 " allow backspacing over everything in insert mode
 set backspace=indent,eol,start
@@ -91,9 +61,6 @@ set history=50    " keep 50 lines of command line history
 set ruler   " show the cursor position all the time
 set showcmd   " display incomplete commands
 set incsearch   " do incremental searching
-
-" For Win32 GUI: remove 't' flag from 'guioptions': no tearoff menu entries
-" let &guioptions = substitute(&guioptions, "t", "", "g")
 
 " Don't use Ex mode, use Q for formatting
 map Q gq
@@ -203,7 +170,8 @@ set undofile
 set undolevels=1000 "maximum number of changes that can be undone
 set undoreload=10000 "maximum number lines to save for undo on a buffer reload
 
-map <F2> :tabnew .<CR>
+map <Tab> :NERDTreeFind<CR>
+map <C-n> :NERDTreeToggle<CR>
 let NERDTreeShowBookmarks=1
 set tabstop=2
 set shiftwidth=2
@@ -211,25 +179,12 @@ set expandtab
 
 set nobackup
 
-nnoremap <silent> <C-i> :call FindInNERDTree()<CR>
-
 autocmd InsertEnter * syn clear EOLWS | syn match EOLWS excludenl /\s\+\%#\@!$/
 autocmd InsertLeave * syn clear EOLWS | syn match EOLWS excludenl /\s\+$/
 highlight EOLWS ctermbg=red guibg=red
 
-function! <SID>StripTrailingWhitespace()
-    " Preparation: save last search, and cursor position.
-    let _s=@/
-    let l = line(".")
-    let c = col(".")
-    " Do the business:
-    %s/\s\+$//e
-    " Clean up: restore previous search history, and cursor position
-    let @/=_s
-    call cursor(l, c)
-endfunction
-nmap <silent> <Leader><space> :call <SID>StripTrailingWhitespace()<CR>
-nnoremap <F5> :GundoToggle<CR>
+"nmap <silent> <Leader><space> :call <SID>StripTrailingWhitespace()<CR>
+nmap <Leader><space> :StripWhitespace<CR>
 
 map <leader>cc :botright cope<cr>
 map <leader>n :cn<cr>
@@ -261,9 +216,6 @@ endfunction
 set t_Co=256 " Explicitly tell vim that the terminal supports 256 colors
 let g:Powerline_symbols = 'unicode'
 
-" Insert the charcode segment after the filetype segment
-call Pl#Theme#InsertSegment('ws_marker', 'after', 'lineinfo')
-
 au BufNewFile,BufRead *.ejs set filetype=html
 
 autocmd QuickFixCmdPost *grep* cwindow
@@ -273,16 +225,10 @@ hi CursorColumn cterm=NONE ctermbg=black
 "ctermfg=white guibg=darkred guifg=white
 set cursorcolumn
 
-colorscheme twilight
-
-au VimEnter * RainbowParenthesesToggle
-au Syntax * RainbowParenthesesLoadRound
-au Syntax * RainbowParenthesesLoadSquare
-au Syntax * RainbowParenthesesLoadBraces
-
-let g:jsx_ext_required = 0 " Allow JSX in normal JS files
-
-let g:syntastic_javascript_checkers = ['eslint']
+" au VimEnter * RainbowParenthesesToggle
+" au Syntax * RainbowParenthesesLoadRound
+" au Syntax * RainbowParenthesesLoadSquare
+" au Syntax * RainbowParenthesesLoadBraces
 
 let g:rbpt_colorpairs = [
     \ ['brown',       'RoyalBlue3'],
@@ -299,3 +245,8 @@ let g:rbpt_colorpairs = [
     \ ['darkred',     'DarkOrchid3'],
     \ ['red',         'firebrick3'],
     \ ]
+
+let g:syntastic_javascript_checkers = ['jsxhint']
+let g:gutentags_cache_dir = '~/.tags_cache'
+let g:alchemist_tag_disable = 1
+autocmd! BufWritePost * Neomake
