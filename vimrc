@@ -1,48 +1,41 @@
 set nocompatible
 filetype off
 
-set rtp+=~/.vim/bundle/Vundle.vim
-call vundle#begin()
-
-Plugin 'gmarik/Vundle.vim'
-Plugin 'tpope/vim-bundler'
-Plugin 'tpope/vim-fugitive'
-
-Plugin 'repeat.vim'
-Plugin 'surround.vim'
-Plugin 'SuperTab'
-Plugin 'file-line'
-Plugin 'grep.vim'
-Plugin 'Tabular'
-Plugin 'Lokaltog/vim-powerline'
-Plugin 'Syntastic'
-Plugin 'The-NERD-tree'
-Plugin 'textobj-user'
-Plugin 'textobj-rubyblock'
-Plugin 'Puppet-Syntax-Highlighting'
-Plugin 'EasyMotion'
-Plugin 'airblade/vim-gitgutter'
-Plugin 'kien/ctrlp.vim'
-Plugin 'guns/vim-clojure-static'
-Plugin 'rainbow_parentheses.vim'
-Plugin 'tpope/vim-fireplace'
-Plugin 'tpope/vim-rake'
-Plugin 'tpope/vim-rails'
-Plugin 'tpope/vim-dispatch'
-Plugin 'ntpeters/vim-better-whitespace'
-Plugin 'LaTeX-Suite-aka-Vim-LaTeX'
-Plugin 'sheerun/vim-polyglot'
-Plugin 'ludovicchabant/vim-gutentags'
-Plugin 'neomake/neomake'
-Plugin 'c-brenn/phoenix.vim'
-Plugin 'tpope/vim-projectionist'
-Plugin 'slashmili/alchemist.vim'
-
-" tComment
-Plugin 'tComment'
-
+call plug#begin('~/.vim/plugged')
+Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
+Plug 'junegunn/fzf.vim'
+Plug 'tpope/vim-bundler'
+Plug 'tpope/vim-fugitive'
+Plug 'tpope/vim-repeat'
+Plug 'tpope/vim-surround'
+Plug 'bogado/file-line'
+Plug 'vim-scripts/grep.vim'
+Plug 'vim-syntastic/syntastic'
+Plug 'scrooloose/nerdtree'
+Plug 'neoclide/coc.nvim', {'tag': '*', 'do': { -> coc#util#install()}}
+Plug 'kana/vim-textobj-user'
+Plug 'rhysd/vim-textobj-ruby'
+Plug 'easymotion/vim-easymotion'
+Plug 'airblade/vim-gitgutter'
+Plug 'luochen1990/rainbow'
+Plug 'tpope/vim-rake'
+Plug 'tpope/vim-rails'
+Plug 'thoughtbot/vim-rspec'
+Plug 'tpope/vim-dispatch'
+Plug 'ntpeters/vim-better-whitespace'
+Plug 'sheerun/vim-polyglot'
+Plug 'neomake/neomake'
+Plug 'c-brenn/phoenix.vim'
+Plug 'elixir-editors/vim-elixir'
+Plug 'tpope/vim-projectionist'
+Plug 'slashmili/alchemist.vim'
+Plug 'Lokaltog/vim-powerline'
+Plug 'tomtom/tcomment_vim'
+Plug 'jiangmiao/auto-pairs'
 " All of your Plugins must be added before the following line
-call vundle#end()            " required
+
+" Initialize plugin system
+call plug#end()
 filetype plugin indent on    " required
 
 let mapleader=','
@@ -130,6 +123,35 @@ nnoremap <C-h> gT
 nnoremap <C-l> gt
 set nu
 
+call textobj#user#plugin('line', {
+\   '-': {
+\     'select-a-function': 'CurrentLineA',
+\     'select-a': 'al',
+\     'select-i-function': 'CurrentLineI',
+\     'select-i': 'il',
+\   },
+\ })
+
+function! CurrentLineA()
+  normal! 0
+  let head_pos = getpos('.')
+  normal! $
+  let tail_pos = getpos('.')
+  return ['v', head_pos, tail_pos]
+endfunction
+
+function! CurrentLineI()
+  normal! ^
+  let head_pos = getpos('.')
+  normal! g_
+  let tail_pos = getpos('.')
+  let non_blank_char_exists_p = getline('.')[head_pos[2] - 1] !~# '\s'
+  return
+  \ non_blank_char_exists_p
+  \ ? ['v', head_pos, tail_pos]
+  \ : 0
+endfunction
+
 " map <F3> :execute "noautocmd vimgrep /" . expand("<cword>") . "/gj **/*." .  expand("%:e") <Bar> cw<CR>
 map <F3> :execute "noautocmd vimgrep /" . expand("<cword>") . "/gj **/*." .  expand("%:e") <Bar> cw
 
@@ -173,6 +195,7 @@ set undoreload=10000 "maximum number lines to save for undo on a buffer reload
 map <Tab> :NERDTreeFind<CR>
 map <C-n> :NERDTreeToggle<CR>
 let NERDTreeShowBookmarks=1
+let g:NERDTreeDirArrows=0
 set tabstop=2
 set shiftwidth=2
 set expandtab
@@ -201,7 +224,7 @@ set statusline=\ %{HasPaste()}%F%m%r%h\ %w\ \ CWD:\ %r%{CurDir()}%h\ \ \ Line:\ 
 
 
 function! CurDir()
-    let curdir = substitute(getcwd(), '/home/rifat/', "~/", "g")
+    let curdir = substitute(getcwd(), '/Users/rifat/', "~/", "g")
     return curdir
 endfunction
 
@@ -223,7 +246,7 @@ au FileType python  set tabstop=4 shiftwidth=4 textwidth=140 softtabstop=4
 
 hi CursorColumn cterm=NONE ctermbg=black
 "ctermfg=white guibg=darkred guifg=white
-set cursorcolumn
+set nocursorcolumn
 
 " au VimEnter * RainbowParenthesesToggle
 " au Syntax * RainbowParenthesesLoadRound
@@ -250,3 +273,64 @@ let g:syntastic_javascript_checkers = ['jsxhint']
 let g:gutentags_cache_dir = '~/.tags_cache'
 let g:alchemist_tag_disable = 1
 autocmd! BufWritePost * Neomake
+
+colorscheme afterglow
+let g:airline_theme='afterglow'
+
+" RSpec.vim mappings
+map <Leader>f :call RunCurrentSpecFile()<CR>
+map <Leader>s :call RunNearestSpec()<CR>
+map <Leader>l :call RunLastSpec()<CR>
+map <Leader>a :call RunAllSpecs()<CR>
+
+let g:dispatch_tmux_height=82
+let g:dispatch_quickfix_height=82
+let g:rspec_command = "Dispatch rspec {spec}"
+
+" FZF functionality
+command! -bang -nargs=* Find
+  \ call fzf#vim#grep(
+  \   'rg --column --line-number --hidden --ignore-case --no-heading --color=always '.shellescape(<q-args>), 1,
+  \   <bang>0 ? fzf#vim#with_preview({'options': '--delimiter : --nth 4..'}, 'up:60%')
+  \           : fzf#vim#with_preview({'options': '--delimiter : --nth 4..'}, 'right:50%:hidden', '?'),
+  \   <bang>0)
+
+let g:fzf_action = {
+  \ 'ctrl-t': 'tab split',
+  \ 'ctrl-x': 'split',
+  \ 'ctrl-v': 'vsplit' }
+
+let g:fzf_layout = { 'window': '-tabnew' }
+set noerrorbells visualbell t_vb=
+if has('autocmd')
+  autocmd GUIEnter * set visualbell t_vb=
+endif
+
+nmap <Leader>g :GFiles<CR>
+nmap <Leader>G :Files<CR>
+nmap <Leader>b :Buffers<CR>
+nmap <Leader>h :History<CR>
+nmap <Leader>t :BTags<CR>
+nmap <Leader>T :Tags<CR>
+nmap <Leader>l :BLines<CR>
+nmap <Leader>L :Lines<CR>
+nmap <Leader>' :Marks<CR>
+nmap <Leader>r :Rg<CR>
+
+set encoding=utf-8
+set termencoding=utf-8
+let g:rainbow_active = 1 "0 if you want to enable it later via :RainbowToggle
+
+set path+=**
+
+" COC configuration
+inoremap <silent><expr> <TAB>
+      \ pumvisible() ? "\<C-n>" :
+      \ <SID>check_back_space() ? "\<TAB>" :
+      \ coc#refresh()
+inoremap <expr><S-TAB> pumvisible() ? "\<C-p>" : "\<C-h>"
+
+function! s:check_back_space() abort
+  let col = col('.') - 1
+  return !col || getline('.')[col - 1]  =~# '\s'
+endfunction
