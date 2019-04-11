@@ -1,0 +1,103 @@
+call plug#begin('~/.vim/plugged')
+Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
+Plug 'junegunn/fzf.vim'
+Plug 'tpope/vim-bundler'
+Plug 'tpope/vim-fugitive'
+Plug 'tpope/vim-repeat'
+Plug 'tpope/vim-surround'
+Plug 'bogado/file-line'
+Plug 'vim-scripts/grep.vim'
+Plug 'vim-syntastic/syntastic'
+Plug 'scrooloose/nerdtree'
+Plug 'ervandew/supertab'
+Plug 'kana/vim-textobj-user'
+Plug 'rhysd/vim-textobj-ruby'
+Plug 'easymotion/vim-easymotion'
+Plug 'airblade/vim-gitgutter'
+Plug 'luochen1990/rainbow'
+Plug 'tpope/vim-rake'
+Plug 'tpope/vim-rails'
+Plug 'thoughtbot/vim-rspec'
+Plug 'tpope/vim-dispatch'
+Plug 'ntpeters/vim-better-whitespace'
+Plug 'sheerun/vim-polyglot'
+Plug 'neomake/neomake'
+Plug 'c-brenn/phoenix.vim'
+Plug 'elixir-editors/vim-elixir'
+Plug 'tpope/vim-projectionist'
+Plug 'slashmili/alchemist.vim'
+Plug 'Lokaltog/vim-powerline'
+Plug 'tomtom/tcomment_vim'
+Plug 'jiangmiao/auto-pairs'
+" All of your Plugins must be added before the following line
+
+" Initialize plugin system
+call plug#end()
+
+" Convenient command to see the difference between the current buffer and the
+" file it was loaded from, thus the changes you made.
+" Only define it when not defined already.
+if !exists(":DiffOrig")
+  command DiffOrig vert new | set bt=nofile | r # | 0d_ | diffthis
+      \ | wincmd p | diffthis
+endif
+
+" Vim set definitions
+source ~/.vim/config/setters
+
+" Vim let definitions
+source ~/.vim/config/letters
+
+" Vim mappings
+source ~/.vim/config/mappings
+
+call textobj#user#plugin('line', {
+\   '-': {
+\     'select-a-function': 'CurrentLineA',
+\     'select-a': 'al',
+\     'select-i-function': 'CurrentLineI',
+\     'select-i': 'il',
+\   },
+\ })
+
+function! CmdLine(str)
+  exe "menu Foo.Bar :" . a:str
+  emenu Foo.Bar
+  unmenu Foo
+endfunction
+
+colorscheme afterglow
+
+" FZF functionality
+command! -bang -nargs=* Find
+  \ call fzf#vim#grep(
+  \   'rg --column --line-number --hidden --ignore-case --no-heading --color=always '.shellescape(<q-args>), 1,
+  \   <bang>0 ? fzf#vim#with_preview({'options': '--delimiter : --nth 4..'}, 'up:60%')
+  \           : fzf#vim#with_preview({'options': '--delimiter : --nth 4..'}, 'right:50%:hidden', '?'),
+  \   <bang>0)
+
+if has('autocmd')
+  autocmd GUIEnter * set visualbell t_vb=
+  autocmd! BufWritePost * Neomake
+
+  " Don't screw up folds when inserting text that might affect them, until
+  " leaving insert mode. Foldmethod is local to the window.
+  autocmd InsertEnter * let w:last_fdm=&foldmethod | setlocal foldmethod=manual
+  autocmd InsertLeave * let &l:foldmethod=w:last_fdm
+
+  " Highlight end-of-line whitespaces
+  autocmd InsertEnter * syn clear EOLWS | syn match EOLWS excludenl /\s\+\%#\@!$/
+  autocmd InsertLeave * syn clear EOLWS | syn match EOLWS excludenl /\s\+$/
+  highlight EOLWS ctermbg=red guibg=red
+
+  " Highlight double spaces
+  autocmd InsertEnter * syn clear DOS | syn match DOS excludenl /\s{2}$/
+  autocmd InsertLeave * syn clear DOS | syn match DOS excludenl /\s\+$/
+  highlight DOS ctermbg=red guibg=red
+
+  " Clear matching buffer for better performance
+  autocmd BufWinLeave * call clearmatches()
+
+  autocmd BufNewFile,BufRead *.ejs set filetype=html
+  autocmd FileType python set tabstop=4 shiftwidth=4 textwidth=140 softtabstop=4
+endif

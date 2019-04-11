@@ -1,0 +1,121 @@
+" for os specific settings; strip newline
+let os = substitute(system('uname -s'),"\n","","")
+
+let mapleader = ","
+
+let v:fcs_choice = "ask"
+
+let g:netrw_liststyle=3
+let g:netrw_sort_sequence = '[\/]$,\<core\%(\.\d\+\)\=,\.[a-np-z]$,\.hs$
+            \ ,\.x10$,\.h$,\.c$,\.cpp$,\.java$
+            \ ,*,\.o$,\.class$,\.obj$,\.info$,\.swp$
+            \ ,\.bak$,\~$'
+
+" help tex-slow
+" Finally, if syntax highlighting is still too slow, you may set
+let g:tex_fast= ""
+let g:tex_fold_enabled=1
+
+" NERDTree
+let NERDTreeShowBookmarks=1
+let g:NERDTreeDirArrows=0
+
+" Rainbow parentheses
+let g:rainbow_active = 1 "0 if you want to enable it later via :RainbowToggle
+
+" FZF
+let g:fzf_action = {
+  \ 'ctrl-t': 'tab split',
+  \ 'ctrl-x': 'split',
+  \ 'ctrl-v': 'vsplit' }
+
+let g:fzf_layout = { 'window': '-tabnew' }
+let g:airline_theme='afterglow'
+
+" Powerline
+let g:Powerline_symbols = 'unicode'
+
+let g:rbpt_colorpairs = [
+    \ ['brown',       'RoyalBlue3'],
+    \ ['Darkblue',    'SeaGreen3'],
+    \ ['darkgreen',   'firebrick3'],
+    \ ['darkcyan',    'RoyalBlue3'],
+    \ ['darkred',     'SeaGreen3'],
+    \ ['darkmagenta', 'DarkOrchid3'],
+    \ ['brown',       'firebrick3'],
+    \ ['darkmagenta', 'DarkOrchid3'],
+    \ ['Darkblue',    'firebrick3'],
+    \ ['darkgreen',   'RoyalBlue3'],
+    \ ['darkcyan',    'SeaGreen3'],
+    \ ['darkred',     'DarkOrchid3'],
+    \ ['red',         'firebrick3'],
+    \ ]
+
+let g:syntastic_javascript_checkers = ['jsxhint']
+let g:gutentags_cache_dir = '~/.tags_cache'
+let g:alchemist_tag_disable = 1
+
+" Rspec
+let g:dispatch_tmux_height=82
+let g:dispatch_quickfix_height=82
+let g:rspec_command = "Dispatch rspec {spec}"
+
+function! CurrentLineA()
+  normal! 0
+  let head_pos = getpos('.')
+  normal! $
+  let tail_pos = getpos('.')
+  return ['v', head_pos, tail_pos]
+endfunction
+
+function! CurrentLineI()
+  normal! ^
+  let head_pos = getpos('.')
+  normal! g_
+  let tail_pos = getpos('.')
+  let non_blank_char_exists_p = getline('.')[head_pos[2] - 1] !~# '\s'
+  return
+  \ non_blank_char_exists_p
+  \ ? ['v', head_pos, tail_pos]
+  \ : 0
+endfunction
+
+" From an idea by Michael Naumann
+function! VisualSearch(direction) range
+  let l:saved_reg = @"
+  execute "normal! vgvy"
+
+  let l:pattern = escape(@", '\\/.*$^~[]')
+  let l:pattern = substitute(l:pattern, "\n$", "", "")
+
+  if a:direction == 'b'
+    execute "normal ?" . l:pattern . "^M"
+  elseif a:direction == 'gv'
+    "call CmdLine("noautocmd vimgrep " . '/'. l:pattern . '/gj' . ' **/*')
+    "execute "noautocmd vimgrep " . '/'. l:pattern . '/gj' . ' **/*'
+    execute "Rgrep -i " . l:pattern
+  elseif a:direction == 'f'
+    execute "normal /" . l:pattern . "^M"
+  endif
+
+  let @/ = l:pattern
+  let @" = l:saved_reg
+endfunction
+
+function! CurDir()
+    let curdir = substitute(getcwd(), '/Users/rifat/', "~/", "g")
+    return curdir
+endfunction
+
+function! HasPaste()
+    if &paste
+        return 'PASTE MODE  '
+    else
+        return ''
+    endif
+endfunction
+
+function! s:check_back_space() abort
+  let col = col('.') - 1
+  return !col || getline('.')[col - 1]  =~# '\s'
+endfunction

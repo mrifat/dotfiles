@@ -1,0 +1,60 @@
+" Traversing tabs
+nnoremap <C-h> gT
+nnoremap <C-l> gt
+
+" Easy window navigation
+noremap  <C-j>    <C-w>j
+noremap  <C-k>    <C-w>k
+
+" Create file if does not exist
+nnoremap gf       :e <cfile><CR>
+nnoremap <C-W>gf  :tabe <cfile><CR>
+
+" spell check
+nnoremap <silent> <Leader>ss :setlocal spell<CR>
+                             \:setlocal spelllang=en<CR>
+
+" Use // for un/commenting line
+nnoremap // :TComment<CR>
+vnoremap // :TComment<CR>
+
+" CTRL-U in insert mode deletes a lot.  Use CTRL-G u to first break undo,
+" so that you can undo CTRL-U after inserting a line break.
+inoremap <C-U> <C-G>u<C-U>
+noremap j gj
+noremap k gk
+
+nnoremap <silent> <Space> :nohlsearch<Bar>:echo<CR>
+
+nmap <silent> <Leader><space> :StripWhitespace<CR>
+
+map <leader>cc :botright cope<cr>
+map <leader>n :cn<cr>
+map <leader>p :cp<cr>
+
+" RSpec.vim mappings
+map <Leader>f :call RunCurrentSpecFile()<CR>
+map <Leader>s :call RunNearestSpec()<CR>
+map <Leader>l :call RunLastSpec()<CR>
+map <Leader>a :call RunAllSpecs()<CR>
+
+
+nmap <Leader>g :GFiles<CR>
+nmap <Leader>G :Files<CR>
+nmap <Leader>b :Buffers<CR>
+nmap <Leader>h :History<CR>
+nmap <Leader>t :BTags<CR>
+nmap <Leader>T :Tags<CR>
+nmap <Leader>l :BLines<CR>
+nmap <Leader>L :Lines<CR>
+nmap <Leader>' :Marks<CR>
+nmap <Leader>r :Rg<CR>
+
+map <F3> :execute "noautocmd vimgrep /" . expand("<cword>") . "/gj **/*." .  expand("%:e") <Bar> cw
+
+vnoremap <silent> * :call VisualSearch('b')<CR>
+vnoremap <silent> # :call VisualSearch('f')<CR>
+vnoremap <silent> gv :call VisualSearch('gv') <Bar> cw<CR>
+
+map <Tab> :NERDTreeFind<CR>
+map <C-n> :NERDTreeToggle<CR>
