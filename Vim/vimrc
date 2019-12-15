@@ -29,6 +29,8 @@ Plug 'slashmili/alchemist.vim'
 Plug 'Lokaltog/vim-powerline'
 Plug 'tomtom/tcomment_vim'
 Plug 'jiangmiao/auto-pairs'
+Plug 'danilo-augusto/vim-afterglow'
+Plug 'mhinz/vim-mix-format'
 " All of your Plugins must be added before the following line
 
 " Initialize plugin system
@@ -100,4 +102,12 @@ if has('autocmd')
 
   autocmd BufNewFile,BufRead *.ejs set filetype=html
   autocmd FileType python set tabstop=4 shiftwidth=4 textwidth=140 softtabstop=4
+
+
+  augroup Mkdir
+    autocmd BufWritePre *
+      \ if !isdirectory(expand("<afile>:p:h")) |
+          \ call mkdir(expand("<afile>:p:h"), "p") |
+      \ endif
+  augroup END
 endif
