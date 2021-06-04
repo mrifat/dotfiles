@@ -103,6 +103,8 @@ if has('autocmd')
 
   autocmd BufNewFile,BufRead *.ejs set filetype=html
   autocmd FileType python set tabstop=4 shiftwidth=4 textwidth=140 softtabstop=4
+  autocmd FileType proto setlocal shiftwidth=2 softtabstop=2 expandtab
+
 
 
   augroup Mkdir
